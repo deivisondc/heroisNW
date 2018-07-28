@@ -3,6 +3,8 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Raid;
+use heroisNW\Personagem;
 
 class RaidController extends Controller
 {
@@ -13,7 +15,12 @@ class RaidController extends Controller
      */
     public function index()
     {
-        //
+        $raids = Raid::all();
+        // $raids = [];
+
+        return view('raid.raidIndex')
+            ->with('titulo', 'Raids')
+            ->with('raids', $raids);
     }
 
     /**
@@ -23,7 +30,11 @@ class RaidController extends Controller
      */
     public function create()
     {
-        //
+        $personagens = Personagem::all();
+
+        return view('raid.raidForm')
+            ->with('titulo', 'Raids - Inclusão')
+            ->with('personagens', $personagens);
     }
 
     /**
@@ -34,7 +45,10 @@ class RaidController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $raid = Raid::create($request->all());
+        $raid->personagens()->sync($request->input('personagem_array'));
+
+        return redirect()->action('RaidController@index');
     }
 
     /**
@@ -79,6 +93,10 @@ class RaidController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $raid = Raid::find($id);
+        $raid->personagens()->sync([]);
+        $raid->delete();
+
+        return redirect()->action('RaidController@index');
     }
 }

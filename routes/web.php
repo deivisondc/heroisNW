@@ -11,8 +11,32 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function() {
+	Route::get('/classes', 'ClasseController@index');
+	Route::get('/classes/incluir', 'ClasseController@create');
+	Route::post('classes/armazenar', 'ClasseController@store');
+	Route::get('/classes/{id}/alterar', 'ClasseController@edit');
+	Route::put('classes/{id}', 'ClasseController@update');
+	Route::delete('classes/{id}', 'ClasseController@destroy');
+
+	Route::get('/especialidades', 'EspecialidadeController@index');
+	Route::get('especialidades/incluir', 'EspecialidadeController@create');
+	Route::post('especialidades/armazenar', 'EspecialidadeController@store');
+	Route::get('especialidades/{id}/alterar', 'EspecialidadeController@edit');
+	Route::put('especialidades/{id}', 'EspecialidadeController@update');
+	Route::delete('especialidades/{id}', 'EspecialidadeController@destroy');
+
+	Route::get('/personagens', 'PersonagemController@index');
+	Route::get('/personagens/incluir', 'PersonagemController@create');
+	Route::post('/personagens/armazenar', 'PersonagemController@store');
+	Route::get('/personagens/{id}', 'PersonagemController@show');
+	Route::delete('personagens/{id}', 'PersonagemController@destroy');
+
+	Route::get('/raids', 'RaidController@index');
+	Route::get('/raids/incluir', 'RaidController@create');
+	Route::post('raids/armazenar', 'RaidController@store');
+	Route::delete('raids/{id}', 'RaidController@destroy');
+
 });
 
 Auth::routes();

@@ -72,7 +72,14 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+
+            <div class="container">
+                <h2>{{$titulo}}</h2>
+                <hr>
+
+                @yield('content')
+
+            </div>
         </main>
     </div>
 </body>

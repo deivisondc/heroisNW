@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Raid extends Model
 {
     
-	protected $fillable = ['nome'];
+	protected $fillable = ['descricao'];
 
 	public $timestamps = false;
 

@@ -17,11 +17,33 @@ class Personagem extends Model
 	}
 
 	public function especialidades() {
-		return $this->belongsToMany('heroisNW\Especialidades', 'especialidades_personagens');
+		return $this->belongsToMany('heroisNW\Especialidade', 'especialidades_personagens');
 	}
 
 	public function raids() {
 		return $this->belongsToMany('heroisNW\Raid', 'personagens_raids');
+	}
+
+	public function nomeDasEspecialidades() {
+		$str = '';
+
+		if ($this->especialidades->count() > 0) {
+			foreach ($this->especialidades as $especialidade) {
+				if (empty($str)) {
+					$str .= $especialidade->nome;
+				} else {
+					$str .= ', ' . $especialidade->nome;
+				}
+			}
+		} else {
+			$str = '-';
+		}
+
+		return $str;
+	}
+
+	public function resumoDoPersonagem() {
+		return ' | Classe: ' . $this->classe->nome . ' | Especialidades: ' . $this->nomeDasEspecialidades();
 	}
 
 }

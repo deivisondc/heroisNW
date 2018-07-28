@@ -3,6 +3,7 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Especialidade;
 
 class EspecialidadeController extends Controller
 {
@@ -13,7 +14,11 @@ class EspecialidadeController extends Controller
      */
     public function index()
     {
-        //
+        $especialidades = Especialidade::all();
+
+        return view('especialidade.especialidadeIndex')
+            ->with('titulo', 'Especialidades')
+            ->with('especialidades', $especialidades);
     }
 
     /**
@@ -23,7 +28,8 @@ class EspecialidadeController extends Controller
      */
     public function create()
     {
-        //
+        return view('especialidade.especialidadeForm')
+            ->with('titulo', 'Especialidades - Inclusão');
     }
 
     /**
@@ -34,7 +40,11 @@ class EspecialidadeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        Especialidade::create($request->all());
+
+        return redirect()->action('EspecialidadeController@index');
+
     }
 
     /**
@@ -56,7 +66,11 @@ class EspecialidadeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $especialidade = Especialidade::find($id);
+
+        return view('especialidade.especialidadeFormEdit')
+            ->with('titulo', 'Especialidades - Alteração')
+            ->with('especialidade', $especialidade);
     }
 
     /**
@@ -68,7 +82,11 @@ class EspecialidadeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $especialidade = Especialidade::find($id);
+        $especialidade->fill($request->all());
+        $especialidade->save();
+
+        return redirect()->action('EspecialidadeController@index');
     }
 
     /**
@@ -79,6 +97,9 @@ class EspecialidadeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $especialidade = Especialidade::find($id);
+        $especialidade->delete();
+
+        return redirect()->action('EspecialidadeController@index');
     }
 }

@@ -3,6 +3,9 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Personagem;
+use heroisNW\Classe;
+use heroisNW\Especialidade;
 
 class PersonagemController extends Controller
 {
@@ -13,7 +16,11 @@ class PersonagemController extends Controller
      */
     public function index()
     {
-        //
+        $personagens = Personagem::all();
+
+        return view('personagem.personagemIndex')
+            ->with('titulo', 'Personagens')
+            ->with('personagens', $personagens);
     }
 
     /**
@@ -23,7 +30,13 @@ class PersonagemController extends Controller
      */
     public function create()
     {
-        //
+        $classes = Classe::all();
+        $especialidades = Especialidade::all();
+
+        return view('personagem.personagemForm')
+            ->with('titulo', 'Personagens - Inclusão')
+            ->with('classes', $classes)
+            ->with('especialidades', $especialidades);
     }
 
     /**
@@ -34,7 +47,12 @@ class PersonagemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $personagem = Personagem::create($request->all());
+        $personagem->especialidades()->sync($request->input('especialidade_array'));
+
+       return redirect()->action('PersonagemController@index');
+
     }
 
     /**
@@ -79,6 +97,12 @@ class PersonagemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        $personagem = Personagem::find($id);
+        $personagem->especialidades()->sync([]);
+        $personagem->delete();
+
+        return redirect()->action('PersonagemController@index');
+
     }
 }

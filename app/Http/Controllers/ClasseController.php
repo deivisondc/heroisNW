@@ -3,6 +3,7 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Classe;
 
 class ClasseController extends Controller
 {
@@ -13,7 +14,11 @@ class ClasseController extends Controller
      */
     public function index()
     {
-        //
+        $classes = Classe::all();
+
+        return view('classe.classeIndex')
+            ->with('titulo', "Classes")
+            ->with('classes', $classes);
     }
 
     /**
@@ -23,7 +28,8 @@ class ClasseController extends Controller
      */
     public function create()
     {
-        //
+        return view('classe.classeForm')
+            ->with('titulo', "Classes - Inclusão");
     }
 
     /**
@@ -34,7 +40,9 @@ class ClasseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $classe = Classe::create($request->all());
+
+        return redirect()->action('ClasseController@index');
     }
 
     /**
@@ -56,7 +64,11 @@ class ClasseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $classe = Classe::find($id);
+
+        return view('classe.classeFormEdit')
+            ->with('titulo', "Classes - Alteração")
+            ->with('classe', $classe);
     }
 
     /**
@@ -68,7 +80,13 @@ class ClasseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $classe = Classe::find($id);
+        $classe->fill($request->all());
+        $classe->save();
+
+        return redirect()->action('ClasseController@index');
+
     }
 
     /**
@@ -79,6 +97,9 @@ class ClasseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $classe = Classe::find($id);
+        $classe->delete();
+
+        return redirect()->action('ClasseController@index');
     }
 }
