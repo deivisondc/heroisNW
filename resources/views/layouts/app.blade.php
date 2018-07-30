@@ -21,7 +21,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    <div id="app" >
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -33,8 +33,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
+                    <ul class="nav nav-tabs card-header-tabs menu-posicionado">
+                        <li class="nav-item">
+                            <a href="/classes" class="nav-link {{!empty($titulo) ? strpos($titulo, 'Classes') === 0 ? 'active' : '' : ''}}">Classes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/especialidades" class="nav-link {{!empty($titulo) ? strpos($titulo, 'Especialidades') === 0 ? 'active' : '' : ''}}">Especialidades</a>
+                        </li>   
+                        <li class="nav-item">
+                        </li>
+                            <a href="/personagens" class="nav-link {{!empty($titulo) ? strpos($titulo, 'Personagens') === 0 ? 'active' : '' : ''}}">Personagens</a>
+                        <li class="nav-item">
+                            <a href="/raids" class="nav-link {{!empty($titulo) ? strpos($titulo, 'Raids') === 0 ? 'active' : '' : ''}}">Raids</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -74,8 +85,21 @@
         <main class="py-4">
 
             <div class="container">
-                <h2>{{$titulo}}</h2>
-                <hr>
+
+                @if(!empty($titulo))
+                    <h2>{{$titulo}}</h2>
+                    <hr>
+                @endif  
+
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger" role="alert">
+                        <h5 class="lbl-bold">Erro</h5>
+                        @foreach ($errors->all() as $error)
+                            <label>{{ $error }}</label>
+                            <br>
+                        @endforeach
+                    </div>
+                @endif
 
                 @yield('content')
 

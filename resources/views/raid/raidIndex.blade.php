@@ -31,7 +31,7 @@
 						<form action="/raids/{{$raid->id}}" method="post">
 							
 							@csrf
-							{{method_field('DELETE')}}
+							@method('DELETE')
 
 							<button class="btn btn-danger">Remover</button>
 						</form>

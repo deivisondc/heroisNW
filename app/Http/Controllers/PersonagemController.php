@@ -3,6 +3,7 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Http\Requests\PersonagemRequest;
 use heroisNW\Personagem;
 use heroisNW\Classe;
 use heroisNW\Especialidade;
@@ -45,9 +46,8 @@ class PersonagemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PersonagemRequest $request)
     {
-        
         $personagem = Personagem::create($request->all());
         $personagem->especialidades()->sync($request->input('especialidade_array'));
 
@@ -63,7 +63,15 @@ class PersonagemController extends Controller
      */
     public function show($id)
     {
-        //
+        $personagem = Personagem::find($id);
+
+        if (is_null($personagem)) {
+            return redirect()->action('PersonagemController@index')->withErrors('Personagem não encontrado.');
+        } else {
+            return view('personagem.personagemShow')
+                ->with('titulo', 'Personagens - Detalhes')
+                ->with('personagem', $personagem);
+        }
     }
 
     /**
@@ -74,7 +82,20 @@ class PersonagemController extends Controller
      */
     public function edit($id)
     {
-        //
+        $personagem = Personagem::find($id);
+
+        if (is_null($personagem)) {
+            return redirect()->action('PersonagemController@index')->withErrors('Personagem não encontrado.');
+        } else {
+            $classes = Classe::all();
+            $especialidades = Especialidade::all();
+
+            return view('personagem.personagemForm')
+                ->with('titulo', 'Personagens - Alteração')
+                ->with('personagem', $personagem)
+                ->with('classes', $classes)
+                ->with('especialidades', $especialidades);
+        }
     }
 
     /**
@@ -84,9 +105,14 @@ class PersonagemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PersonagemRequest $request, $id)
     {
-        //
+        $personagem = Personagem::find($id);
+        $personagem->fill($request->all());
+        $personagem->especialidades()->sync($request->input('especialidade_array'));
+        $personagem->save();
+
+        return redirect()->action('PersonagemController@index');
     }
 
     /**
@@ -99,10 +125,19 @@ class PersonagemController extends Controller
     {
         
         $personagem = Personagem::find($id);
-        $personagem->especialidades()->sync([]);
-        $personagem->delete();
 
-        return redirect()->action('PersonagemController@index');
+        if (is_null($personagem)) {
+            return redirect()->action('PersonagemController@index')->withErrors('Personagem não encontrado.');
+        } else {
+            if ($personagem->raids()->count() > 0) {
+                return redirect()->action('PersonagemController@index')->withErrors('Existem Raids ativas das quais este Personagem participa.');
+            } else {
+                $personagem->especialidades()->sync([]);
+                $personagem->delete();
+
+                return redirect()->action('PersonagemController@index');
+            }
+        }
 
     }
 }

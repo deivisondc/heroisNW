@@ -3,6 +3,7 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Http\Requests\ClasseRequest;
 use heroisNW\Classe;
 
 class ClasseController extends Controller
@@ -26,8 +27,9 @@ class ClasseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+
         return view('classe.classeForm')
             ->with('titulo', "Classes - Inclusão");
     }
@@ -38,7 +40,7 @@ class ClasseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClasseRequest $request)
     {
         $classe = Classe::create($request->all());
 
@@ -62,13 +64,17 @@ class ClasseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $classe = Classe::find($id);
 
-        return view('classe.classeFormEdit')
-            ->with('titulo', "Classes - Alteração")
-            ->with('classe', $classe);
+        if (is_null($classe)) {
+            return redirect()->action('ClasseController@index')->withErrors('Classe não encontrada.');
+        } else {
+            return view('classe.classeForm')
+                ->with('titulo', "Classes - Alteração")
+                ->with('classe', $classe);
+        }
     }
 
     /**
@@ -78,7 +84,7 @@ class ClasseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ClasseRequest $request, $id)
     {
 
         $classe = Classe::find($id);
@@ -98,8 +104,15 @@ class ClasseController extends Controller
     public function destroy($id)
     {
         $classe = Classe::find($id);
-        $classe->delete();
-
-        return redirect()->action('ClasseController@index');
+        if (is_null($classe)) {
+            return redirect()->action('ClasseController@index')->withErrors('Classe não encontrada.');
+        } else {
+            if ($classe->personagens()->count() > 0) {
+                return redirect()->action('ClasseController@index')->withErrors('Existem Personagens ativos desta Classe.');
+            } else {
+                 $classe->delete();
+                 return redirect()->action('ClasseController@index');
+            }
+        }
     }
 }

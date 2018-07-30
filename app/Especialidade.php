@@ -12,7 +12,7 @@ class Especialidade extends Model
 	public $timestamps = false;
 
 	public function personagens() {
-		$this->belongsToMany('heroisNW\Personagem', 'especialidades_personagens');
+		return $this->belongsToMany('heroisNW\Personagem', 'especialidades_personagens');
 	}
 
 }

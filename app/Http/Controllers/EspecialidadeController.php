@@ -3,6 +3,7 @@
 namespace heroisNW\Http\Controllers;
 
 use Illuminate\Http\Request;
+use heroisNW\Http\Requests\EspecialidadeRequest;
 use heroisNW\Especialidade;
 
 class EspecialidadeController extends Controller
@@ -38,7 +39,7 @@ class EspecialidadeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EspecialidadeRequest $request)
     {
         
         Especialidade::create($request->all());
@@ -68,9 +69,13 @@ class EspecialidadeController extends Controller
     {
         $especialidade = Especialidade::find($id);
 
-        return view('especialidade.especialidadeFormEdit')
-            ->with('titulo', 'Especialidades - Alteração')
-            ->with('especialidade', $especialidade);
+        if (is_null($especialidade)) {
+            return redirect()->action('EspecialidadeController@index')->withErrors('Especialidade não encontrada.');
+        } else {
+            return view('especialidade.especialidadeForm')
+                ->with('titulo', 'Especialidades - Alteração')
+                ->with('especialidade', $especialidade);
+        }
     }
 
     /**
@@ -80,7 +85,7 @@ class EspecialidadeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EspecialidadeRequest $request, $id)
     {
         $especialidade = Especialidade::find($id);
         $especialidade->fill($request->all());
@@ -98,8 +103,16 @@ class EspecialidadeController extends Controller
     public function destroy($id)
     {
         $especialidade = Especialidade::find($id);
-        $especialidade->delete();
+        if (is_null($especialidade)) {
+            return redirect()->action('EspecialidadeController@index')->withErrors('Especialidade não encontrada.');
+        } else {
+            if ($especialidade->personagens()->count() > 0) {
+                return redirect()->action('EspecialidadeController@index')->withErrors('Existem Personagens ativos desta Especialidade.');
+            } else {
+                $especialidade->delete();
 
-        return redirect()->action('EspecialidadeController@index');
+                return redirect()->action('EspecialidadeController@index');
+            }
+        }
     }
 }

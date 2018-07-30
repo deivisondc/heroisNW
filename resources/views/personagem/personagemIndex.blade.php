@@ -13,32 +13,38 @@
 			</tr>
 		</thead>
 
-		@foreach($personagens as $personagem)
+		@if(empty($personagens)) 
+			<tr>
+				<td colspan="3">Nenhum registro encontrado!</td>
+			</tr>
+		@else 
+			@foreach($personagens as $personagem)
 
-		<tr>
-			<td>{{$personagem->nome}}</td>
-			<td>{{$personagem->classe->nome}}</td>
-			<td width="250px">{{$personagem->nomeDasEspecialidades()}}</td>
-			<td width="100px">Imagem</td>
-			<td width="100px">
-				<a href="/personagens/{{$personagem->id}}" class="btn btn-info">Detalhes</a>
-			</td>
-			<td width="100px">
-				<a href="/personagens/{{$personagem->id}}/alterar" class="btn btn-success">Alterar</a>
-			</td>
-			<td width="100px">
-				<form action="/personagens/{{$personagem->id}}" method="post">
-					
-					@csrf
-					{{method_field('DELETE')}}
+			<tr>
+				<td>{{$personagem->nome}}</td>
+				<td>{{$personagem->classe->nome}}</td>
+				<td width="250px">{{$personagem->nomeDasEspecialidades()}}</td>
+				<td width="100px">Imagem</td>
+				<td width="100px">
+					<a href="/personagens/{{$personagem->id}}" class="btn btn-info">Detalhes</a>
+				</td>
+				<td width="100px">
+					<a href="/personagens/{{$personagem->id}}/alterar" class="btn btn-success">Alterar</a>
+				</td>
+				<td width="100px">
+					<form action="/personagens/{{$personagem->id}}" method="post">
+						
+						@csrf
+						@method('DELETE')
 
-					<button class="btn btn-danger">Remover</button>
+						<button class="btn btn-danger">Remover</button>
 
-				</form>
-			</td>
-		</tr>
+					</form>
+				</td>
+			</tr>
 
-		@endforeach
+			@endforeach
+		@endif
 	</table>
 
 @endsection

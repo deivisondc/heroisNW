@@ -10,24 +10,32 @@
 				<td>Nome</td>
 			</tr>
 		</thead>
-		@foreach($especialidades as $especialidade)
 
-		<tr>
-			<td>{{$especialidade->nome}}</td>
-			<td width="100px">
-				<a href="/especialidades/{{$especialidade->id}}/alterar" class="btn btn-success">Alterar</a>
-			</td>
-			<td width="100px">
-				<form action="/especialidades/{{$especialidade->id}}" method="post">
-					@csrf
-					{{method_field('DELETE')}}
+		@if(empty($especialidades)) 
+			<tr>
+				<td>Nenhum registro encontrado!</td>
+			</tr>
+		@else 
 
-					<button class="btn btn-danger">Remover</button>
-				</form>
-			</td>
-		</tr>
+			@foreach($especialidades as $especialidade)
 
-		@endforeach
+			<tr>
+				<td>{{$especialidade->nome}}</td>
+				<td width="100px">
+					<a href="/especialidades/{{$especialidade->id}}/alterar" class="btn btn-success">Alterar</a>
+				</td>
+				<td width="100px">
+					<form action="/especialidades/{{$especialidade->id}}" method="post">
+						@csrf
+						@method('DELETE')
+
+						<button class="btn btn-danger">Remover</button>
+					</form>
+				</td>
+			</tr>
+
+			@endforeach
+		@endif
 	</table>
 
 @endsection

@@ -12,7 +12,7 @@ class Classe extends Model
 	public $timestamps = false;
 
 	public function personagens() {
-		$this->hasMany('heroisNW\Personagem');
+		return $this->hasMany('heroisNW\Personagem');
 	}
 
 }

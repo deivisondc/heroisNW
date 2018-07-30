@@ -30,11 +30,16 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/personagens/incluir', 'PersonagemController@create');
 	Route::post('/personagens/armazenar', 'PersonagemController@store');
 	Route::get('/personagens/{id}', 'PersonagemController@show');
+	Route::get('/personagens/{id}/alterar', 'PersonagemController@edit');
+	Route::put('/personagens/{id}', 'PersonagemController@update');
 	Route::delete('personagens/{id}', 'PersonagemController@destroy');
 
 	Route::get('/raids', 'RaidController@index');
 	Route::get('/raids/incluir', 'RaidController@create');
 	Route::post('raids/armazenar', 'RaidController@store');
+	Route::get('raids/{id}', 'RaidController@show');
+	Route::get('raids/{id}/alterar', 'RaidController@edit');
+	Route::put('raids/{id}', 'RaidController@update');
 	Route::delete('raids/{id}', 'RaidController@destroy');
 
 });
@@ -42,3 +47,4 @@ Route::group(['middleware' => 'auth'], function() {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
