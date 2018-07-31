@@ -13,7 +13,8 @@ class PersonagemSeeder extends Seeder
     public function run()
     {
         Personagem::create([
-        	'nome' => 'Steven',
+        	'id' => 1,
+            'nome' => 'Steven',
         	'pontos_vida' => 2900,
         	'pontos_defesa' => 200,
         	'pontos_dano' => 340,
@@ -22,7 +23,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 1
         ]);
         Personagem::create([
-        	'nome' => 'Mona',
+        	'id' => 2,
+            'nome' => 'Mona',
         	'pontos_vida' => 3100,
         	'pontos_defesa' => 200,
         	'pontos_dano' => 180,
@@ -31,7 +33,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 2
         ]);
         Personagem::create([
-        	'nome' => 'Morgan',
+        	'id' => 3,
+            'nome' => 'Morgan',
         	'pontos_vida' => 6000,
         	'pontos_defesa' => 360,
         	'pontos_dano' => 130,
@@ -40,7 +43,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 3
         ]);
         Personagem::create([
-        	'nome' => 'Rank',
+        	'id' => 4,
+            'nome' => 'Rank',
         	'pontos_vida' => 2500,
         	'pontos_defesa' => 220,
         	'pontos_dano' => 300,
@@ -49,7 +53,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 1
         ]);
         Personagem::create([
-        	'nome' => 'Braian',
+        	'id' => 5,
+            'nome' => 'Braian',
         	'pontos_vida' => 2400,
         	'pontos_defesa' => 190,
         	'pontos_dano' => 330,
@@ -58,7 +63,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 4
         ]);
         Personagem::create([
-        	'nome' => 'Lariel',
+        	'id' => 6,
+            'nome' => 'Lariel',
         	'pontos_vida' => 3800,
         	'pontos_defesa' => 250,
         	'pontos_dano' => 280,
@@ -67,7 +73,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 5
         ]);
         Personagem::create([
-        	'nome' => 'Maycon',
+        	'id' => 7,
+            'nome' => 'Maycon',
         	'pontos_vida' => 3400,
         	'pontos_defesa' => 260,
         	'pontos_dano' => 290,
@@ -76,7 +83,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 5
         ]);
         Personagem::create([
-        	'nome' => 'Rock',
+        	'id' => 8,
+            'nome' => 'Rock',
         	'pontos_vida' => 5600,
         	'pontos_defesa' => 400,
         	'pontos_dano' => 150,
@@ -85,7 +93,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 3
         ]);
         Personagem::create([
-        	'nome' => 'Rakan',
+        	'id' => 9,
+            'nome' => 'Rakan',
         	'pontos_vida' => 3000,
         	'pontos_defesa' => 250,
         	'pontos_dano' => 400,
@@ -94,7 +103,8 @@ class PersonagemSeeder extends Seeder
         	'classe_id' => 6
         ]);
         Personagem::create([
-        	'nome' => 'Gruntar',
+        	'id' => 10,
+            'nome' => 'Gruntar',
         	'pontos_vida' => 3700,
         	'pontos_defesa' => 240,
         	'pontos_dano' => 190,

@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
         	ClasseSeeder::class,
         	EspecialidadeSeeder::class,
         	PersonagemSeeder::class,
-        	RaidSeeder::class
+        	RaidSeeder::class,
+            EspecialidadePersonagemSeeder::class,
+            UserSeeder::class
         ]);
     }
 }

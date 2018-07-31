@@ -12,6 +12,9 @@ class RaidSeeder extends Seeder
      */
     public function run()
     {
-        Raid::create(['descricao' => 'Raid NW']);
+        Raid::create([
+        	'id' => 1,
+        	'descricao' => 'Raid NW'
+        ]);
     }
 }
