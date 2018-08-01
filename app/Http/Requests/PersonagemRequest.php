@@ -3,6 +3,8 @@
 namespace heroisNW\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PersonagemRequest extends FormRequest
 {
@@ -30,7 +32,8 @@ class PersonagemRequest extends FormRequest
             'pontos_defesa' => 'required|integer|min:0',
             'pontos_dano' => 'required|integer|min:1',
             'velocidade_ataque' => 'required|numeric|min:0.1',
-            'velocidade_movimento' => 'required|integer|min:1'
+            'velocidade_movimento' => 'required|integer|min:1',
+            'especialidade_array' => 'required'
         ];
     }
 
@@ -60,7 +63,17 @@ class PersonagemRequest extends FormRequest
 
             'velocidade_movimento.required' => 'O campo \'Velocidade de Movimento\' é obrigatório.',
             'velocidade_movimento.integer' => 'O campo \'Velocidade de Movimento\' deve ser um número inteiro.',
-            'velocidade_movimento.min' => 'O campo \'Velocidade de Movimento\' deve ser no mínimo :min.'
+            'velocidade_movimento.min' => 'O campo \'Velocidade de Movimento\' deve ser no mínimo :min.',
+
+            'especialidade_array.required' => 'É obrigatório selecionar pelo menos uma \'Especialidade\'.'
         ];
+    }
+
+    protected function failedValidation(Validator $validator) {
+        if (request()->is('api/*')) {
+             throw new HttpResponseException(response()->json(array("validation_error" => $validator->errors()), 422));
+        } else {
+            parent::failedValidation($validator);
+        }
     }
 }

@@ -4,6 +4,7 @@
 
 	<?php function isAlteracao() { return Request::is('*/alterar');} ?>
 
+
 	<form action="{{isAlteracao() ? '/personagens/' . $personagem->id : '/personagens'}}" method="post" enctype="multipart/form-data">
 		
 		@csrf
@@ -14,7 +15,7 @@
 		<div class="form-group">
 			
 			<label>Nome</label>
-			<input type="text" name="nome" class="form-control" maxlength="50" value="{{count($errors) > 0 ? old('nome') : isAlteracao() ? $personagem->nome : ''}}">
+			<input type="text" name="nome" class="form-control" maxlength="50" value="{{count($errors) > 0 ? old('nome') : (isAlteracao() ? $personagem->nome : '')}}">
 
 			<label>Classe</label>
 			@if(!empty($classes))

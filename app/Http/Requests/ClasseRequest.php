@@ -3,6 +3,8 @@
 namespace heroisNW\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ClasseRequest extends FormRequest
 {
@@ -34,5 +36,13 @@ class ClasseRequest extends FormRequest
             'nome.min' => 'O campo \'Nome\' deve conter no mínimo :min caracteres.',
             'nome.max' => 'O campo \'Nome\' deve conter no máximo :max caracteres.'
         ];
+    }
+
+    protected function failedValidation(Validator $validator) {
+        if (request()->is('api/*')) {
+             throw new HttpResponseException(response()->json(array("validation_error" => $validator->errors()), 422));
+        } else {
+            parent::failedValidation($validator);
+        }
     }
 }
