@@ -24,7 +24,9 @@
 				<td>{{$personagem->nome}}</td>
 				<td>{{$personagem->classe->nome}}</td>
 				<td width="250px">{{$personagem->nomeDasEspecialidades()}}</td>
-				<td width="100px">Imagem</td>
+				<td width="100px" class="td-thumb">
+					<img src="{{!empty($personagem->thumbmail) && Storage::disk('public')->exists($personagem->thumbmail) ? '/storage/' . $personagem->thumbmail : '/storage/avatar_silhouette.png' }}" class="img-thumb">
+				</td>
 				<td width="100px">
 					<a href="/personagens/{{$personagem->id}}" class="btn btn-info">Detalhes</a>
 				</td>

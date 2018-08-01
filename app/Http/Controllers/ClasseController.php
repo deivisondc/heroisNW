@@ -13,13 +13,17 @@ class ClasseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $classes = Classe::all();
 
-        return view('classe.classeIndex')
-            ->with('titulo', "Classes")
-            ->with('classes', $classes);
+        if ($request->is('api/classes')) {
+            return response()->json(count($classes) == 0 ? ['message' => 'Nenhum registro encontrado'] : $classes);
+        } else {
+            return view('classe.classeIndex')
+                ->with('titulo', "Classes")
+                ->with('classes', $classes);
+        }
     }
 
     /**
@@ -42,9 +46,10 @@ class ClasseController extends Controller
      */
     public function store(ClasseRequest $request)
     {
+        $isApi = $request->is('api/classes');
         $classe = Classe::create($request->all());
 
-        return redirect()->action('ClasseController@index');
+        return $this->retornaMensagemSucesso($isApi, 'criada');
     }
 
     /**
@@ -53,9 +58,18 @@ class ClasseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $isApi = $request->is('api/classes/*');
+        $classe = Classe::find($id);
+
+        if (is_null($classe)) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
+        } else {
+            if ($isApi) {
+                return response()->json($classe);
+            }
+        }
     }
 
     /**
@@ -69,7 +83,7 @@ class ClasseController extends Controller
         $classe = Classe::find($id);
 
         if (is_null($classe)) {
-            return redirect()->action('ClasseController@index')->withErrors('Classe não encontrada.');
+            return $this->retornaMensagemNaoEncontrado(false);
         } else {
             return view('classe.classeForm')
                 ->with('titulo', "Classes - Alteração")
@@ -86,13 +100,17 @@ class ClasseController extends Controller
      */
     public function update(ClasseRequest $request, $id)
     {
-
+        $isApi = $request->is('api/classes/*');
         $classe = Classe::find($id);
-        $classe->fill($request->all());
-        $classe->save();
 
-        return redirect()->action('ClasseController@index');
+        if (is_null($classe)) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
+        } else {
+            $classe->fill($request->all());
+            $classe->save();
 
+            return $this->retornaMensagemSucesso($isApi, 'alterada');    
+        }
     }
 
     /**
@@ -101,18 +119,35 @@ class ClasseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $isApi = $request->is('api/classes/*');
         $classe = Classe::find($id);
         if (is_null($classe)) {
-            return redirect()->action('ClasseController@index')->withErrors('Classe não encontrada.');
+            return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             if ($classe->personagens()->count() > 0) {
-                return redirect()->action('ClasseController@index')->withErrors('Existem Personagens ativos desta Classe.');
+                $msgErro = 'Existem Personagens ativos desta Classe.';
+                return $isApi 
+                       ? response()->json(['message' => $msgErro], 500)
+                       : redirect()->action('ClasseController@index')->withErrors($msgErro);
             } else {
                  $classe->delete();
-                 return redirect()->action('ClasseController@index');
+
+                 return $this->retornaMensagemSucesso($isApi, 'removida');
             }
         }
+    }
+
+    private function retornaMensagemNaoEncontrado($isApi) {
+        return $isApi 
+               ? response()->json(['message' => 'Classe não encontrada'], 404)
+               : redirect()->action('ClasseController@index')->withErrors('Classe não encontrada.');
+    }
+
+    private function retornaMensagemSucesso($isApi, $acao) {
+        return $isApi
+                ? response()->json(['message' => 'Classe ' . $acao . ' com sucesso'], 200)
+                : redirect()->action('ClasseController@index');
     }
 }

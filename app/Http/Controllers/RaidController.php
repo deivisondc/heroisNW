@@ -14,14 +14,18 @@ class RaidController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $raids = Raid::all();
-        // $raids = [];
-
-        return view('raid.raidIndex')
-            ->with('titulo', 'Raids')
-            ->with('raids', $raids);
+        // Rever se faço lazy para quando for API e eager para quando for API
+        $raids = Raid::with('personagens.classe')->with('personagens.especialidades')->get();
+        
+        if ($request->is('api/raids')) {
+            return response()->json(count($raids) == 0 ? ['message' => 'Nenhum registro encontrado'] : $raids);
+        } else {
+            return view('raid.raidIndex')
+                ->with('titulo', 'Raids')
+                ->with('raids', $raids);
+        }
     }
 
     /**
@@ -46,10 +50,11 @@ class RaidController extends Controller
      */
     public function store(RaidRequest $request)
     {
+        $isApi = $request->is('api/raids');
         $raid = Raid::create($request->all());
         $raid->personagens()->sync($request->input('personagem_array'));
 
-        return redirect()->action('RaidController@index');
+        return $this->retornaMensagemSucesso($isApi, 'criada');
     }
 
     /**
@@ -58,16 +63,21 @@ class RaidController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $raid = Raid::find($id);
+        $isApi = $request->is('api/raids/*');
+        $raid = Raid::with('personagens.classe')->with('personagens.especialidades')->where('id',$id)->get();
 
-        if (is_null($raid)) {
-            return redirect()->action('RaidController@index')->withErrors('Raid não encontrada.');
+        if (count($raid) == 0) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
-            return view('raid.raidShow')
-                ->with('titulo', 'Raids - Detalhes')
-                ->with('raid', $raid);
+            if ($isApi) {
+                return response()->json($raid);
+            } else {
+                return view('raid.raidShow')
+                    ->with('titulo', 'Raids - Detalhes')
+                    ->with('raid', $raid);
+            }
         }
     }
 
@@ -82,7 +92,7 @@ class RaidController extends Controller
         $raid = Raid::find($id);
 
         if (is_null($raid)) {
-            return redirect()->action('RaidController@index')->withErrors('Raid não encontrada.');
+            return $this->retornaMensagemNaoEncontrado(false);
         } else {
             $personagens = Personagem::all();
 
@@ -102,12 +112,18 @@ class RaidController extends Controller
      */
     public function update(RaidRequest $request, $id)
     {
+        $isApi = $request->is('api/raids/*');
         $raid = Raid::find($id);
-        $raid->fill($request->all());
-        $raid->personagens()->sync($request->input('personagem_array'));
-        $raid->save();
 
-        return redirect()->action('RaidController@index');
+        if (is_null($raid)) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
+        } else {
+            $raid->fill($request->all());
+            $raid->personagens()->sync($request->input('personagem_array'));
+            $raid->save();
+
+            return $this->retornaMensagemSucesso($isApi, 'alterada');
+        }
     }
 
     /**
@@ -116,17 +132,30 @@ class RaidController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $isApi = $request->is('api/raids/*');
         $raid = Raid::find($id);
 
         if (is_null($raid)) {
-            return redirect()->action('RaidController@index')->withErrors('Raid não encontrada.');
+            return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             $raid->personagens()->sync([]);
             $raid->delete();
 
-            return redirect()->action('RaidController@index');
+            return $this->retornaMensagemSucesso($isApi, 'removida');
         }
+    }
+
+    private function retornaMensagemNaoEncontrado($isApi) {
+        return $isApi 
+               ? response()->json(['message' => 'Raid não encontrada'], 404)
+               : redirect()->action('RaidController@index')->withErrors('Raid não encontrada.');
+    }
+
+    private function retornaMensagemSucesso($isApi, $acao) {
+        return $isApi
+                ? response()->json(['message' => 'Raid ' . $acao . ' com sucesso'], 200)
+                : redirect()->action('RaidController@index');
     }
 }

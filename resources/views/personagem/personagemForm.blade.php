@@ -4,7 +4,7 @@
 
 	<?php function isAlteracao() { return Request::is('*/alterar');} ?>
 
-	<form action="{{isAlteracao() ? '/personagens/' . $personagem->id : '/personagens/armazenar'}}" method="post">
+	<form action="{{isAlteracao() ? '/personagens/' . $personagem->id : '/personagens'}}" method="post" enctype="multipart/form-data">
 		
 		@csrf
 		@if(isAlteracao())
@@ -86,6 +86,25 @@
 				@endif
 			</fieldset>
 
+		</div>
+
+		<div class="form-group">
+			<fieldset class="form-control">
+				<legend>Thumbmail</legend>
+				
+				<input type="file" class="form-control" name="imagem" accept="image/*">
+
+				@if(!empty($personagem->thumbmail))
+					<img src="/storage/{{$personagem->thumbmail}}" class="img-tamanho img-margem">
+
+					<hr>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="chkExclusaoThumbmail" name="exclusao_thumbmail" >
+						<label class="custom-control-label" for="chkExclusaoThumbmail">Marque a caixa para excluir a imagem</label>
+					</div>
+				@endif
+
+			</fieldset>
 		</div>
 
 		<div class="form-group">

@@ -2,17 +2,19 @@
 
 @section('content')
 
-	<div class="form-group row">
-		<label class="col-sm-1 col-form-label lbl-bold">Nome</label>
-		<div class="col-sm-10">
-			<label class="col-sm-10 col-form-label">{{$personagem->nome}}</label>
+	<div class="form-group"> 
+		<div class="form-group row">
+			<label class="col-sm-1 col-form-label lbl-bold">Nome</label>
+			<div class="col-sm-10">
+				<label class="col-sm-10 col-form-label">{{$personagem->nome}}</label>
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group row">
-		<label class="col-sm-1 col-form-label lbl-bold">Classe</label>
-		<div class="col-sm-10">
-			<label class="col-sm-1 col-form-label">{{$personagem->classe->nome}}</label>
+		<div class="form-group row">
+			<label class="col-sm-1 col-form-label lbl-bold">Classe</label>
+			<div class="col-sm-10">
+				<label class="col-sm-1 col-form-label">{{$personagem->classe->nome}}</label>
+			</div>
 		</div>
 	</div>
 
@@ -60,7 +62,19 @@
 					@endforeach
 				</table>
 			@else 
-				<label>Nenhuma Especialidade cadastrada!</label>
+				<label>Personagem não possui nenhuma Especialidade cadastrada!</label>
+			@endif
+		</fieldset>
+	</div>
+
+	<div class="form-group">
+		<fieldset class="form-control">
+			<legend>Thumbmail</legend>
+			
+			@if(!empty($personagem->thumbmail))
+				<img src="/storage/{{$personagem->thumbmail}}" class="img-tamanho">
+			@else
+				<label>Personagem não possui uma Thumbmail cadastrada!</label>
 			@endif
 		</fieldset>
 	</div>

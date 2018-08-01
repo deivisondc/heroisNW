@@ -13,13 +13,17 @@ class EspecialidadeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $especialidades = Especialidade::all();
 
-        return view('especialidade.especialidadeIndex')
-            ->with('titulo', 'Especialidades')
-            ->with('especialidades', $especialidades);
+        if ($request->is('api/especialidades')) {
+            return response()->json(count($especialidades) == 0 ? ['message' => 'Nenhum registro encontrado'] : $especialidades);
+        } else {
+            return view('especialidade.especialidadeIndex')
+                ->with('titulo', 'Especialidades')
+                ->with('especialidades', $especialidades);
+        }
     }
 
     /**
@@ -41,10 +45,10 @@ class EspecialidadeController extends Controller
      */
     public function store(EspecialidadeRequest $request)
     {
-        
+        $isApi = $request->is('api/especialidades');
         Especialidade::create($request->all());
 
-        return redirect()->action('EspecialidadeController@index');
+        return $this->retornaMensagemSucesso($isApi, 'criada');
 
     }
 
@@ -54,9 +58,18 @@ class EspecialidadeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $isApi = $request->is('api/especialidades/*');
+        
+        $especialidade = Especialidade::find($id);
+        if (is_null($especialidade)) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
+        } else {
+            if ($isApi) {
+                return response()->json($especialidade);
+            }
+        }
     }
 
     /**
@@ -70,7 +83,7 @@ class EspecialidadeController extends Controller
         $especialidade = Especialidade::find($id);
 
         if (is_null($especialidade)) {
-            return redirect()->action('EspecialidadeController@index')->withErrors('Especialidade não encontrada.');
+            return $this->retornaMensagemNaoEncontrado(false);
         } else {
             return view('especialidade.especialidadeForm')
                 ->with('titulo', 'Especialidades - Alteração')
@@ -87,11 +100,17 @@ class EspecialidadeController extends Controller
      */
     public function update(EspecialidadeRequest $request, $id)
     {
-        $especialidade = Especialidade::find($id);
-        $especialidade->fill($request->all());
-        $especialidade->save();
+        $isApi = $request->is('api/especialidades/*');
 
-        return redirect()->action('EspecialidadeController@index');
+        $especialidade = Especialidade::find($id);
+        if (is_null($especialidade)) {
+            return $this->retornaMensagemNaoEncontrado($isApi);
+        } else {
+            $especialidade->fill($request->all());
+            $especialidade->save();
+
+            return $this->retornaMensagemSucesso($isApi, 'alterada');
+        }   
     }
 
     /**
@@ -100,19 +119,36 @@ class EspecialidadeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $isApi = $request->is('api/especialidades/*');
+
         $especialidade = Especialidade::find($id);
         if (is_null($especialidade)) {
-            return redirect()->action('EspecialidadeController@index')->withErrors('Especialidade não encontrada.');
+            return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             if ($especialidade->personagens()->count() > 0) {
-                return redirect()->action('EspecialidadeController@index')->withErrors('Existem Personagens ativos desta Especialidade.');
+                $msgErro = 'Existem Personagens ativos desta Especialidade.';
+                return $isApi 
+                       ? response()->json(['message' => $msgErro], 500)
+                       : redirect()->action('EspecialidadeController@index')->withErrors($msgErro);
             } else {
                 $especialidade->delete();
 
-                return redirect()->action('EspecialidadeController@index');
+                return $this->retornaMensagemSucesso($isApi, 'removida');
             }
         }
+    }
+
+    private function retornaMensagemNaoEncontrado($isApi) {
+        return $isApi 
+               ? response()->json(['message' => 'Especialidade não encontrada'], 404)
+               : redirect()->action('EspecialidadeController@index')->withErrors('Especialidade não encontrada.');
+    }
+
+    private function retornaMensagemSucesso($isApi, $acao) {
+        return $isApi
+                ? response()->json(['message' => 'Especialidade ' . $acao . ' com sucesso'], 200)
+                : redirect()->action('EspecialidadeController@index');
     }
 }

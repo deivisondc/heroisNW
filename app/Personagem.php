@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Personagem extends Model
 {
-    
+
+	protected $hidden = ['classe_id', 'thumbmail', 'pivot'];
     protected $table = 'personagens';
-	protected $fillable = ['nome', 'pontos_vida', 'pontos_defesa', 'pontos_dano', 'velocidade_ataque', 'velocidade_movimento', 'classe_id'];
+	protected $fillable = ['nome', 'pontos_vida', 'pontos_defesa', 'pontos_dano', 'velocidade_ataque', 'velocidade_movimento', 'classe_id', 'thumbmail'];
 
 	public $timestamps = false;
 

@@ -4,7 +4,7 @@
 
 	<?php function isAlteracao() { return Request::is('*/alterar');} ?>
 
-	<form action="{{isAlteracao() ? '/classes/' . $classe->id : '/classes/armazenar'}}" method="post">
+	<form action="{{isAlteracao() ? '/classes/' . $classe->id : '/classes'}}" method="post">
 		@csrf
 		@if(isAlteracao()) 
 			@method('PUT')
