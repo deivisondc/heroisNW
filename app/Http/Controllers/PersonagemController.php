@@ -129,8 +129,8 @@ class PersonagemController extends Controller
         if (is_null($personagem)) {
             return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
-
-            if (!is_null($request->input('exclusao_thumbmail')) || $request->hasFile('imagem')) {
+            
+            if ((!is_null($request->input('exclusao_thumbmail')) && $request->input('exclusao_thumbmail')) || $request->hasFile('imagem')) {
                 if (!empty($personagem->thumbmail)) {
                     Storage::delete($personagem->thumbmail);
                     $personagem->thumbmail = '';

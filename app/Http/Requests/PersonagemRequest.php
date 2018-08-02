@@ -25,10 +25,10 @@ class PersonagemRequest extends FormRequest
      */
     public function rules()
     {
-
+        
         if (request()->method() == 'PATCH') {
             return [
-                'required_without_all:nome,classe_id,pontos_vida,pontos_defesa,pontos_dano,velocidade_ataque,velocidade_movimento,especialidade_array',
+                'required_without_all:nome,classe_id,pontos_vida,pontos_defesa,pontos_dano,velocidade_ataque,velocidade_movimento,especialidade_array,exclusao_thumbmail',
                 'nome' => 'min:3|max:50',
                 'classe_id' => 'integer',
                 'pontos_vida' => 'integer|min:1',
@@ -36,7 +36,8 @@ class PersonagemRequest extends FormRequest
                 'pontos_dano' => 'integer|min:1',
                 'velocidade_ataque' => 'numeric|min:0.1',
                 'velocidade_movimento' => 'integer|min:1',
-                'especialidade_array' => 'array'
+                'especialidade_array' => 'array',
+                'exclusao_thumbmail' => 'boolean'
             ];
         }
 
@@ -48,7 +49,8 @@ class PersonagemRequest extends FormRequest
             'pontos_dano' => 'required|integer|min:1',
             'velocidade_ataque' => 'required|numeric|min:0.1',
             'velocidade_movimento' => 'required|integer|min:1',
-            'especialidade_array' => 'required|array'
+            'especialidade_array' => 'required|array',
+            'exclusao_thumbmail' => 'boolean'
         ];
     }
 
@@ -84,7 +86,9 @@ class PersonagemRequest extends FormRequest
             'velocidade_movimento.min' => 'O campo \'Velocidade de Movimento\' deve ser no mínimo :min.',
 
             'especialidade_array.required' => 'É obrigatório selecionar pelo menos uma \'Especialidade\'.',
-            'especialidade_array.array' => 'O campo \'Especialidade\' deve ser um Array.'
+            'especialidade_array.array' => 'O campo \'Especialidade\' deve ser um Array.',
+
+            'exclusao_thumbmail.boolean' => 'O campo \'Exclusão do Thumbmail\' deve ser um Boolean.'
         ];
     }
 

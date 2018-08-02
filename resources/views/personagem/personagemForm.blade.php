@@ -100,7 +100,7 @@
 
 					<hr>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="chkExclusaoThumbmail" name="exclusao_thumbmail" >
+						<input type="checkbox" class="custom-control-input" id="chkExclusaoThumbmail" name="exclusao_thumbmail" value="1">
 						<label class="custom-control-label" for="chkExclusaoThumbmail">Marque a caixa para excluir a imagem</label>
 					</div>
 				@endif
