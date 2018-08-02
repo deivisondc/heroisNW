@@ -30,12 +30,14 @@ use Illuminate\Http\Request;
 	Route::post('/personagens', 'PersonagemController@store');
 	Route::get('/personagens/{id}', 'PersonagemController@show');
 	Route::put('/personagens/{id}', 'PersonagemController@update');
+	Route::patch('/personagens/{id}', 'PersonagemController@update');
 	Route::delete('/personagens/{id}', 'PersonagemController@destroy');
 
 	Route::get('/raids', 'RaidController@index');
 	Route::post('/raids', 'RaidController@store');
 	Route::get('/raids/{id}', 'RaidController@show');
 	Route::put('/raids/{id}', 'RaidController@update');
+	Route::patch('/raids/{id}', 'RaidController@update');
 	Route::delete('/raids/{id}', 'RaidController@destroy');
 // });
 

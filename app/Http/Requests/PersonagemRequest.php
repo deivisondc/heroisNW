@@ -25,25 +25,43 @@ class PersonagemRequest extends FormRequest
      */
     public function rules()
     {
+
+        if (request()->method() == 'PATCH') {
+            return [
+                'required_without_all:nome,classe_id,pontos_vida,pontos_defesa,pontos_dano,velocidade_ataque,velocidade_movimento,especialidade_array',
+                'nome' => 'min:3|max:50',
+                'classe_id' => 'integer',
+                'pontos_vida' => 'integer|min:1',
+                'pontos_defesa' => 'integer|min:0',
+                'pontos_dano' => 'integer|min:1',
+                'velocidade_ataque' => 'numeric|min:0.1',
+                'velocidade_movimento' => 'integer|min:1',
+                'especialidade_array' => 'array'
+            ];
+        }
+
         return [
             'nome' => 'required|min:3|max:50',
-            'classe_id' => 'required',
+            'classe_id' => 'required|integer',
             'pontos_vida' => 'required|integer|min:1',
             'pontos_defesa' => 'required|integer|min:0',
             'pontos_dano' => 'required|integer|min:1',
             'velocidade_ataque' => 'required|numeric|min:0.1',
             'velocidade_movimento' => 'required|integer|min:1',
-            'especialidade_array' => 'required'
+            'especialidade_array' => 'required|array'
         ];
     }
 
     public function messages() {
         return [
+            'required_without_all' => 'É requerido preencher pelo menos um campo.',
+            
             'nome.required' => 'O campo \'Nome\' é obrigatório.',
             'nome.min' => 'O campo \'Nome\' deve conter no mínimo :min caracteres.',
             'nome.max' => 'O campo \'Nome\' deve conter no máximo :max caracteres.',
 
             'classe_id.required' => 'O campo \'Classe\' é obrigatório.',
+            'classe_id.integer' => 'O campo \'Classe\' deve ser um número inteiro.',
 
             'pontos_vida.required' => 'O campo \'Vida\' é obrigatório.',
             'pontos_vida.integer' => 'O campo \'Vida\' deve ser um número inteiro.',
@@ -65,7 +83,8 @@ class PersonagemRequest extends FormRequest
             'velocidade_movimento.integer' => 'O campo \'Velocidade de Movimento\' deve ser um número inteiro.',
             'velocidade_movimento.min' => 'O campo \'Velocidade de Movimento\' deve ser no mínimo :min.',
 
-            'especialidade_array.required' => 'É obrigatório selecionar pelo menos uma \'Especialidade\'.'
+            'especialidade_array.required' => 'É obrigatório selecionar pelo menos uma \'Especialidade\'.',
+            'especialidade_array.array' => 'O campo \'Especialidade\' deve ser um Array.'
         ];
     }
 

@@ -81,11 +81,11 @@ class PersonagemController extends Controller
             return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             if ($isApi) {
-                return response()->json($personagem);
+                return response()->json($personagem[0]);
             } else {
                 return view('personagem.personagemShow')
                     ->with('titulo', 'Personagens - Detalhes')
-                    ->with('personagem', $personagem);
+                    ->with('personagem', $personagem[0]);
             }
         }
     }
@@ -143,7 +143,9 @@ class PersonagemController extends Controller
             }
 
             $personagem->fill($request->all());
-            $personagem->especialidades()->sync($request->input('especialidade_array'));
+            if (!is_null($request->input('especialidade_array'))) {
+                $personagem->especialidades()->sync($request->input('especialidade_array'));
+            }
             $personagem->save();
 
             return $this->retornaMensagemSucesso($isApi, 'alterado');

@@ -25,19 +25,30 @@ class RaidRequest extends FormRequest
      */
     public function rules()
     {
+        if (request()->method() == 'PATCH') {
+            return [
+                'required_without_all:descricao,personagem_array',
+                'descricao' => 'min:3|max:200',
+                'personagem_array' => 'array'
+            ];
+        }
+
         return [
             'descricao' => 'required|min:3|max:200',
-            'personagem_array' => 'required'
+            'personagem_array' => 'required|array'
         ];
     }
 
     public function messages() {
         return [
+            'required_without_all' => 'É requerido preencher pelo menos um campo.',
+
             'descricao.required' => 'O campo \'Descrição\' é obrigatório.',
             'descricao.min' => 'O campo \'Descrição\' deve conter no mínimo :min caracteres.',
             'descricao.max' => 'O campo \'Descrição\' deve conter no máximo :max caracteres.',
 
-            'personagem_array.required' => 'É obrigatório selecionar pelo menos um \'Personagem\'.'
+            'personagem_array.required' => 'É obrigatório selecionar pelo menos um \'Personagem\'.',
+            'personagem_array.array' => 'O campo \'Personagem\' deve ser um Array.'
         ];
     }
 

@@ -72,11 +72,11 @@ class RaidController extends Controller
             return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             if ($isApi) {
-                return response()->json($raid);
+                return response()->json($raid[0]);
             } else {
                 return view('raid.raidShow')
                     ->with('titulo', 'Raids - Detalhes')
-                    ->with('raid', $raid);
+                    ->with('raid', $raid[0]);
             }
         }
     }
@@ -119,7 +119,9 @@ class RaidController extends Controller
             return $this->retornaMensagemNaoEncontrado($isApi);
         } else {
             $raid->fill($request->all());
-            $raid->personagens()->sync($request->input('personagem_array'));
+            if(!is_null($request->input('personagem_array'))) {
+                $raid->personagens()->sync($request->input('personagem_array'));
+            }
             $raid->save();
 
             return $this->retornaMensagemSucesso($isApi, 'alterada');
