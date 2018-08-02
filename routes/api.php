@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api'], function() {
 	Route::get('/classes', 'ClasseController@index');
 	Route::post('/classes', 'ClasseController@store');
 	Route::get('/classes/{id}', 'ClasseController@show');
@@ -39,7 +39,7 @@ use Illuminate\Http\Request;
 	Route::put('/raids/{id}', 'RaidController@update');
 	Route::patch('/raids/{id}', 'RaidController@update');
 	Route::delete('/raids/{id}', 'RaidController@destroy');
-// });
+});
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
