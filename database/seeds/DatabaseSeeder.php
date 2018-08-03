@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         	PersonagemSeeder::class,
         	RaidSeeder::class,
             EspecialidadePersonagemSeeder::class,
+            PersonagemRaidSeeder::class,
             UserSeeder::class
         ]);
     }

@@ -39,6 +39,14 @@ MySQL
 ### Servidor
 
 Para subir o servidor utilize o comando "php artisan serve"
+A URL padrão do sistema é http://localhost:8000, e com o seed já foi criado um usuário para logar no sistema:
+
+```
+E-mail: teste@teste.com.br
+Senha: 123456
+```
+
+Caso não queira utilizar este usuário, pode registrar um novo no botão superior direito da tela.
 
 ### API
 
@@ -57,8 +65,8 @@ Para isto, siga os seguintes passos
 
 	Obs: os valores do client_id e client_secret são aqueles do passo da Instalação, que foi pedido para guardar 
 	na etapa 9) da Instalação. Caso tenha perdido, rodar o comando "php artisan passport:keys --force" para gerar 
-	novas chaves. Já o username e password são dados que foram inseridos no banco (seed) como um usuário para teste 
-	do sistema.
+	novas chaves. Já o username e password são dados que foram inseridos no banco (seed) como um usuário para 
+	teste do sistema.
 
 2) Ao enviar essa requisição, receberá uma resposta contendo as informações que serão usadas para autenticar. 
    Essa resposta é semelhante à seguinte:

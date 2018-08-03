@@ -18,12 +18,14 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('/classes', 'ClasseController@store');
 	Route::get('/classes/{id}', 'ClasseController@show');
 	Route::put('/classes/{id}', 'ClasseController@update');
+	Route::patch('/classes/{id}', 'ClasseController@update');
 	Route::delete('/classes/{id}', 'ClasseController@destroy');
 
 	Route::get('/especialidades', 'EspecialidadeController@index');
 	Route::post('/especialidades', 'EspecialidadeController@store');
 	Route::get('/especialidades/{id}', 'EspecialidadeController@show');
 	Route::put('/especialidades/{id}', 'EspecialidadeController@update');
+	Route::patch('/especialidades/{id}', 'EspecialidadeController@update');
 	Route::delete('/especialidades/{id}', 'EspecialidadeController@destroy');
 
 	Route::get('/personagens', 'PersonagemController@index');
