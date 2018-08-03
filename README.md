@@ -54,8 +54,8 @@ Para a utilização da API é necessário passar pela autenticação OAuth2 prov
 Para isto, siga os seguintes passos
 
 ```
-1) Utilizando o Postman, fazer um requisição POST para a URL http://<url-que-esta-rodando-o-sistema>/oauth/token 
-   com os seguintes parâmetros no BODY
+1) Utilizando o Postman, fazer um requisição POST para a URL http://localhost:8000/oauth/token com os 
+   seguintes parâmetros no BODY
 	
 	grant_type: password
 	client_id: 2
