@@ -14,12 +14,16 @@ MySQL
 
 ```
 1) Clonar este repositório
-2) Rodar o comando "php artisan key:generate"
-3) Criar um banco de dados
-4) Configurar o arquivo .env com os dados referentes ao banco
-5) Rodar o comando "php artisan migrate" para criar as tabelas no banco de dados
-6) Rodar o comando "php artisan db:seed" para alimentar as tabelas do banco com alguns dados iniciais
-7) Rodar o comando "php artisan passport:install" para instalar o Passport (autorização OAuth2 para a API). Isso vai retornar um resultado parecido com o seguinte
+2) Rodar o comando "composer install"
+3) Rodar o comando "php artisan key:generate"
+4) Criar um banco de dados
+5) Configurar o arquivo .env com os dados referentes ao banco
+6) Rodar o comando "php artisan migrate" para criar as tabelas no banco de dados
+7) Rodar o comando "php artisan db:seed" para alimentar as tabelas do banco com alguns dados iniciais
+8) Rodar o comando "php artisan storage:link" para criar um link simbólico no Storage e deixar os arquivos 
+   visíveis para a web.
+9) Rodar o comando "php artisan passport:install" para instalar o Passport (autorização OAuth2 para a API). 
+   Isso vai retornar um resultado parecido com o seguinte
 
 	Personal access client created successfully.
 	Client ID: 1
@@ -38,10 +42,12 @@ Para subir o servidor utilize o comando "php artisan serve"
 
 ### API
 
-Para a utilização da API é necessário passar pela autenticação OAuth2 provida pelo Laravel Passport. Para isto, siga os seguintes passos
+Para a utilização da API é necessário passar pela autenticação OAuth2 provida pelo Laravel Passport. 
+Para isto, siga os seguintes passos
 
 ```
-1) Utilizando o Postman, fazer um requisição POST para a URL http://<url-que-esta-rodando-o-sistema>/oauth/token com os seguintes parâmetros no BODY
+1) Utilizando o Postman, fazer um requisição POST para a URL http://<url-que-esta-rodando-o-sistema>/oauth/token 
+   com os seguintes parâmetros no BODY
 	
 	grant_type: password
 	client_id: 2
@@ -49,9 +55,13 @@ Para a utilização da API é necessário passar pela autenticação OAuth2 prov
 	username: teste@teste.com.br
 	password: 123456
 
-	Obs: os valores do client_id e client_secret são aqueles do passo da Instalação, que foi pedido para guardar. Caso tenha perdido, rodar o comando "php artisan passport:keys --force" para gerar novas chaves. Já o username e password são dados que foram inseridos no banco (seed) como um usuário para teste do sistema.
+	Obs: os valores do client_id e client_secret são aqueles do passo da Instalação, que foi pedido para guardar 
+	na etapa 9) da Instalação. Caso tenha perdido, rodar o comando "php artisan passport:keys --force" para gerar 
+	novas chaves. Já o username e password são dados que foram inseridos no banco (seed) como um usuário para teste 
+	do sistema.
 
-2) Ao enviar essa requisição, receberá uma resposta contendo as informações que serão usadas para autenticar. Essa resposta é semelhante à seguinte:
+2) Ao enviar essa requisição, receberá uma resposta contendo as informações que serão usadas para autenticar. 
+   Essa resposta é semelhante à seguinte:
 
 	{
 	    "token_type": "Bearer",
@@ -61,13 +71,14 @@ Para a utilização da API é necessário passar pela autenticação OAuth2 prov
 	}
 
 
-3) Com esses dados, já é possível utilizar a API, basta que para cada requisição feita, seja colocado no HEADER os seguintes parâmetros:
+3) Com esses dados, já é possível utilizar a API, basta que para cada requisição feita, seja colocado no HEADER os 
+   seguintes parâmetros:
 
 	Accept: application/json
 	Authorization: <token_type> <access_token>
 
 	Obs: substitua o <token_type> e o <access_token> pelos valores correspondentes recebidos na etapa 2).
-	
+
 ```
 
 ### Ferramentas utilizadas
